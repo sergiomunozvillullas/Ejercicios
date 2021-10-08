@@ -61,7 +61,7 @@ while ($x<15) {
     $x++;
   }
 }
-echo " </br></br></br></br></br>carton: ";
+echo " </br></br></br></br></br>carton : ";
 
 for ($i=0; $i < 15 ; $i++) {
 
@@ -81,36 +81,66 @@ echo "</br>";
 
 
 //JUEGO CON UN CARTON
-function ganador(){
+function ganador($jugador1,$jugador2,$jugador3,$jugador4){
 $cartonganador=array();
+$cont0=0;
+$cont1=0;
+$cont2=0;
+$cont3=0;
+$cont4=0;
+$cont5=0;
+$cont6=0;
+$cont7=0;
+$cont8=0;
+$cont9=0;
+$cont10=0;
+$cont11=0;
+
+$carton0=$jugador1[0];
+$carton1=$jugador1[1];
+$carton2=$jugador1[2];
+
+
+
 $y=0;
-while ($y<15) {
-  $num_aleatorio = rand(1,60);
+$cartonganador=array();
+while ($y<60) {
+$num_aleatorio = rand(1,60);
 if (!in_array($num_aleatorio,$cartonganador)) {
-      if (in_array($num_aleatorio,$carton)){
-            array_push($cartonganador,$num_aleatorio);
+          array_push($cartonganador,$num_aleatorio);
 
 $y++;
+}
+while ($cont0>15 || $cont1>15 ||$cont2>15 ||$cont3>15 ||$cont4>15 ||$cont5>15 ||$cont6>15 ||$cont7>15 ||$cont8>15 ||$cont9>15 ||$cont10>15 ||$cont1>15) {
+for ($k=0; $k <60 ; $k++) {
+  for ($j=0; $j <12 ; $j++) {
+  if (in_array($cartonganador[$k],$carton0[$j])) {
+  $cont0++;
+
+  }
+  if (in_array($cartonganador[$k],$carton1)) {
+  $cont1++;
+
+  }
+  if (in_array($cartonganador[$k],$carton2)) {
+  $cont2++;
+}
 
 }
 }
 }
-
-echo "Carton ganador: ";
-for ($i=0; $i < 15 ; $i++) {
-
-
- echo " ||$cartonganador[$i]||";
-    //  var_dump($carton);
-}
-
 }
 
 
+for ($j=0; $j <60 ; $j++) {
+echo "||$cartonganador[$j]||";
+}
+echo "</br>";
+echo "||$cont0||";echo "||$cont1||";echo "||$cont2||";
+}
 
 
-
-
+echo ganador($jugador1,$jugador2,$jugador3,$jugador4);
 
 
 echo "</BODY>
