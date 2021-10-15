@@ -79,7 +79,12 @@ while($contjug1[0]<15 && $contjug1[1]<15  && $contjug1[2]<15
     if (in_array(15,${"contjug".$j})) {
     $ganador="Jugador $j";
           echo "<center>El $ganador ha sido el ganador</center>";
+for ($i=0; $i <3 ; $i++) {
 
+if (${"contjug".$j}[$i]==15) {
+echo "<center> con el carton $i</center>";
+}
+}
 
     }
 
@@ -87,7 +92,7 @@ while($contjug1[0]<15 && $contjug1[1]<15  && $contjug1[2]<15
 
            array_push($cartonganador,$num_aleatorio);
      }
-        //var_dump($contjug1,$contjug2,$contjug3,$contjug4);
+        var_dump($contjug1,$contjug2,$contjug3,$contjug4);
      $fila=0;
 echo "<center><table border='1'> <caption><h1> BOLAS HASTA QUE EL GANADOR CANTÓ: </h1></caption> <tr>";
 for ($i=0; $i <sizeof($cartonganador) ; $i++) {
