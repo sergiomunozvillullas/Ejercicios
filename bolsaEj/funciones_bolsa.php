@@ -146,38 +146,86 @@ function valoresminyvolumen ($fichero,$nombre,$nombre2){
 function consultaoperacionesbolsa ($fichero,$nombre,$valor){
 
 
-foreach($fichero as $linea=>$texto) {
-  if (substr("$texto",0,strlen($nombre))==$nombre) {
+  foreach($fichero as $linea=>$texto) {
+    if (substr("$texto",0,strlen($nombre))==$nombre) {
 
-  $nombrevalor=substr("$texto",0,32);
-  $ultimo=substr("$texto",32,8);
-  $varia1=substr("$texto",40,8);
-  $varia2=substr("$texto",48,8);
-  $acano=substr("$texto",56,16);
-  $max=substr("$texto",72,8);
-  $min=substr("$texto",80,8);
-  $vol=substr("$texto",88,16);
-  $cap=substr("$texto",104,8);
-  $hora=substr("$texto",112,5);
-  if ($valor=='Ultimo') {
-    return $ultimo;
-  }elseif ($valor=='Variacion %') {
-    return $varia1;
-  }elseif ($valor=='Variacion') {
-    return $varia2;
-  }elseif ($valor=='AC % Anual') {
-    return $acano;
-  }elseif ($valor=='Maximo') {
-    return $max;
-  }elseif ($valor=='Minimo') {
-    return $min;
-  }elseif ($valor=='Volumen') {
-    return $vol;
-  }elseif ($valor=='Capitalizacion') {
-    return $cap;
+      $nombrevalor=substr("$texto",0,32);
+      $ultimo=substr("$texto",32,8);
+      $varia1=substr("$texto",40,8);
+      $varia2=substr("$texto",48,8);
+      $acano=substr("$texto",56,16);
+      $max=substr("$texto",72,8);
+      $min=substr("$texto",80,8);
+      $vol=substr("$texto",88,16);
+      $cap=substr("$texto",104,8);
+      $hora=substr("$texto",112,5);
+      if ($valor=='Ultimo') {
+        return $ultimo;
+      }elseif ($valor=='Variacion %') {
+        return $varia1;
+      }elseif ($valor=='Variacion') {
+        return $varia2;
+      }elseif ($valor=='AC % Anual') {
+        return $acano;
+      }elseif ($valor=='Maximo') {
+        return $max;
+      }elseif ($valor=='Minimo') {
+        return $min;
+      }elseif ($valor=='Volumen') {
+        return $vol;
+      }elseif ($valor=='Capitalizacion') {
+        return $cap;
+      }
+    };
+  }
+
+}
+function total ($fichero,$elegido){
+  $totalvol=0;
+  $totalcap=0;
+  foreach($fichero as $linea=>$texto) {
+    $vol=intval(str_replace(".","",substr("$texto",88,16)));
+    $cap=intval(str_replace(".","",substr("$texto",104,8)));
+
+    if ($elegido=='Total volumen') {
+  $totalvol=$totalvol+$vol;
+  }
+  if ($elegido=='Total Capitalizacion') {
+$totalcap+=$cap;
   }
 };
+
+$totalvol1=number_format($totalvol,3,",",".");
+$totalcap1=number_format($totalcap,3,",",".");
+if ($elegido=='Total volumen') {
+return $totalvol1;
 }
+if ($elegido=='Total Capitalizacion') {
+return $totalcap1;
+}
+}
+
+function valoresbolsa ($fichero){
+
+  $arrayvol= array();
+  $arraycap= array();
+  foreach($fichero as $linea=>$texto) {
+if ($linea>0) {
+
+    $vol=intval(str_replace(".","",substr("$texto",88,16)));
+    $cap=intval(str_replace(".","",substr("$texto",104,8)));
+
+    array_push($arrayvol,$vol);
+    array_push($arraycap,$cap);
+
+}
+  };
+
+  echo "El valor maximo de la Capitalizacion es : ".max($arraycap)."<br>";
+  echo "El valor maximo del Volumen es : ".max($arrayvol)."<br>";
+
+  echo "El valor minimo de la Capitalizacion es : ".min($arraycap)."<br>";
+  echo "El valor minimo del Volumen es : ".min($arrayvol)."<br>";
 
 }
 
