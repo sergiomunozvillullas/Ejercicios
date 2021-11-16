@@ -136,9 +136,9 @@ $recaudacion6=0;
 
 
 // abrimos/creamos fichero
-$f1= fopen("premiosorteo_$fecha.txt","a+");
+$f1= fopen("premiosorteo_$fecha.txt","w+");
 //escribimos por cada linea
-fwrite($f1,"Cada participante con acierto en reintegro (2%) gana un total de".$recaudacionr."\n");
+fwrite($f1,"Cada participante con acierto en reintegro (2%) gana un total de ".$recaudacionr."\n");
 fwrite($f1,"Cada participante con 3 aciertos (8%) gana un total de ".$recaudacion3."\n");
 fwrite($f1,"Cada participante con 4 aciertos (5%) gana un total de ".$recaudacion4."\n");
 fwrite($f1,"Cada participante con 5 aciertos (15%) gana un total de ".$recaudacion5."\n");
