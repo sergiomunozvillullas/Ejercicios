@@ -27,9 +27,10 @@ $array=combinacion();
 
 echo "<table border='1'> <tr>";
 echo "<tr><td>N1</td><td>N2</td><td>N3</td><td>N4</td><td>N5</td><td>N6</td><td>C</td><td>R</td></tr>";
-for ($i=0; $i < sizeof($array) ; $i++) {
+for ($i=0; $i < sizeof($array)-1 ; $i++) {
 echo "<td><img src=r22_bolasprimitiva/$array[$i].png width=40px height=40px></td>";
 }
+echo "<td><img src=r22_bolasprimitiva/rbola$array[$i].png width=40px height=40px></td>";
 echo " </tr></table> <br>";
 
 
