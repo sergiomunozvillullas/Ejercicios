@@ -1,4 +1,0 @@
-<?php
-drop database empleadosnn;
-
-?>
