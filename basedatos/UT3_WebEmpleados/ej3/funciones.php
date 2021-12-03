@@ -7,13 +7,9 @@ function test_input($data) {
   return $data;
 }
 
-function revisarparametros($dni,$nombreemp,$fecha,$nombredept,$salario,$apellido){
+function revisarparametros($dni,$nombredept){
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombredept = test_input($_POST["nombredept"]);
-      $salario = test_input($_POST["salario"]);
-    $nombreemp = test_input($_POST["nombre"]);
-    $apellido = test_input($_POST["apellido"]);
-    $fecha = test_input($_POST["fechnac"]);
     $dni = test_input($_POST["dni"]);
 }
 }
@@ -53,21 +49,30 @@ catch(PDOException $e) {
 return $arraydepartamentos;
 }
 
+function arraydni($conn){
+  try {
+    $arraydni=array();
+    $stmt = $conn->prepare("SELECT dni FROM empleado");
+    $stmt->execute();
+
+    // set the resulting array to associative
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+	 foreach($stmt->fetchAll() as $row) {
+        array_push($arraydni,$row["dni"]);
+     }
+}
+catch(PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+return $arraydni;
+}
 
 
-function añadirempleado($dni,$nombre,$fechanac,$nombredepartamento,$salario,$apellido,$conn,$arraydepartamentos){
-      var_dump($arraydepartamentos);
+
+function añadirempleado($dni,$nombredepartamento,$conn){
     try {
       $fecha=date('Y-m-d');
-      $cont=0;
       $mensaje="";
-
-      $stmt = $conn->prepare("INSERT INTO empleado (dni,nombre,apellidos,fecha_nac,salario) VALUES ('$dni','$nombre','$apellido','$fechanac','$salario')");
-      $stmt->execute();
-
-      // set the resulting array to associative
-      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-      $mensaje="Empleado añadido"."<br>";
 
       $stmt1 = $conn->prepare("SELECT cod_dpto FROM departamento WHERE nombre_dpto='$nombredepartamento'");
          $stmt1->execute();
@@ -76,11 +81,14 @@ function añadirempleado($dni,$nombre,$fechanac,$nombredepartamento,$salario,$ap
            $codigo=$row["cod_dpto"];
          }
 
-        $stmt2 = $conn->prepare("INSERT INTO emple_depart (dni,cod_dpto,fecha_ini,fecha_fin) VALUES ('$dni','$codigo','$fecha','2000/11/02')");
-        $stmt2->execute();
+      $stmt = $conn->prepare("UPDATE emple_depart SET  cod_dpto='$codigo'  WHERE dni='$dni'");
+      $stmt->execute();
 
-        // set the resulting array to associative
-        $result2 = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
+      // set the resulting array to associative
+      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+      $mensaje="<br>"."Empleado reidirigido"."<br>";
+
+
 
 }
   catch(PDOException $e) {
