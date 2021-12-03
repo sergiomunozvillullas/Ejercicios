@@ -7,14 +7,9 @@ function test_input($data) {
   return $data;
 }
 
-function revisarparametros($dni,$nombreemp,$fecha,$nombredept,$salario,$apellido){
+function revisarparametros($nombredept){
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombredept = test_input($_POST["nombredept"]);
-      $salario = test_input($_POST["salario"]);
-    $nombreemp = test_input($_POST["nombre"]);
-    $apellido = test_input($_POST["apellido"]);
-    $fecha = test_input($_POST["fechnac"]);
-    $dni = test_input($_POST["dni"]);
 }
 }
 
@@ -24,7 +19,7 @@ function crearconexion($servername, $username, $password, $dbname){
   try {
  $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
- echo "Connected successfully";
+ echo "Connected successfully"."<br>";
    }
 catch(PDOException $e)
    {
@@ -55,18 +50,12 @@ return $arraydepartamentos;
 
 
 
-function añadirempleado($dni,$nombre,$fechanac,$nombredepartamento,$salario,$apellido,$conn,$arraydepartamentos){
-      var_dump($arraydepartamentos);
+
+function mostrarhistorico($nombredepartamento,$conn){
     try {
       $fecha=date('Y-m-d');
       $mensaje="";
-
-      $stmt = $conn->prepare("INSERT INTO empleado (dni,nombre,apellidos,fecha_nac,salario) VALUES ('$dni','$nombre','$apellido','$fechanac','$salario')");
-      $stmt->execute();
-
-      // set the resulting array to associative
-      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-      $mensaje="Empleado añadido"."<br>";
+      //---------------------------------------------------------------------------
 
       $stmt1 = $conn->prepare("SELECT cod_dpto FROM departamento WHERE nombre_dpto='$nombredepartamento'");
          $stmt1->execute();
@@ -74,12 +63,31 @@ function añadirempleado($dni,$nombre,$fechanac,$nombredepartamento,$salario,$ap
          foreach($stmt1->fetchAll() as $row) {
            $codigo=$row["cod_dpto"];
          }
+         //---------------------------------------------------------------------------
 
-        $stmt2 = $conn->prepare("INSERT INTO emple_depart (dni,cod_dpto,fecha_ini) VALUES ('$dni','$codigo','$fecha')");
-        $stmt2->execute();
+         $stmt2 = $conn->prepare("SELECT dni FROM emple_depart WHERE cod_dpto='$codigo' AND fecha_fin is not null");
+            $stmt2->execute();
+            $resul2 = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
+            foreach($stmt2->fetchAll() as $row) {
+              $dni=$row["dni"];
 
-        // set the resulting array to associative
-        $result2 = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
+            //---------------------------------------------------------------------------
+if (!empty($dni)) {
+  $stmt3 = $conn->prepare("SELECT nombre FROM empleado WHERE dni='$dni'");
+     $stmt3->execute();
+     $resul3 = $stmt3->setFetchMode(PDO::FETCH_ASSOC);
+     foreach($stmt3->fetchAll() as $row) {
+       $nombremep=$row["nombre"];
+       echo "<br>"."$nombremep";
+     }
+
+ }else {
+     echo "No hay empleados";
+   }
+ }
+
+
+
 
 }
   catch(PDOException $e) {

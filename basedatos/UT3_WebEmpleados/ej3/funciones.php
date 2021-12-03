@@ -73,6 +73,7 @@ function añadirempleado($dni,$nombredepartamento,$conn){
     try {
       $fecha=date('Y-m-d');
       $mensaje="";
+      //---------------------------------------------------------------------------
 
       $stmt1 = $conn->prepare("SELECT cod_dpto FROM departamento WHERE nombre_dpto='$nombredepartamento'");
          $stmt1->execute();
@@ -80,15 +81,20 @@ function añadirempleado($dni,$nombredepartamento,$conn){
          foreach($stmt1->fetchAll() as $row) {
            $codigo=$row["cod_dpto"];
          }
-
-      $stmt = $conn->prepare("UPDATE emple_depart SET  cod_dpto='$codigo'  WHERE dni='$dni'");
+         //---------------------------------------------------------------------------
+      $stmt = $conn->prepare("UPDATE emple_depart SET fecha_fin='$fecha'  WHERE dni='$dni'");
       $stmt->execute();
 
       // set the resulting array to associative
       $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+      //---------------------------------------------------------------------------
+     $stmt2 = $conn->prepare("INSERT INTO emple_depart (dni,cod_dpto,fecha_ini) VALUES ('$dni','$codigo','$fecha')");
+     $stmt2->execute();
+
+     // set the resulting array to associative
+     $result2 = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
       $mensaje="<br>"."Empleado reidirigido"."<br>";
-
-
 
 }
   catch(PDOException $e) {
