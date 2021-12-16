@@ -59,7 +59,7 @@ echo "<table border=1>";
 echo "<tr> <td>NOMBRE</td><td>SALARIO</td></tr>";
       //---------------------------------------------------------------------------
 
-      $stmt1 = $conn->prepare("SELECT nombre,salario FROM empleado,departamento,emple_depart WHERE departamento.cod_dpto=emple_depart.cod_dpto AND empleado.dni=emple_depart.dni AND nombre_dpto='$nombredepartamento';");
+      $stmt1 = $conn->prepare("SELECT nombre,salario FROM empleado,departamento,emple_depart WHERE departamento.cod_dpto=emple_depart.cod_dpto AND empleado.dni=emple_depart.dni AND nombre_dpto='$nombredepartamento' AND fecha_fin is null;");
          $stmt1->execute();
          $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
          foreach($stmt1->fetchAll() as $row) {
@@ -67,11 +67,11 @@ echo "<tr> <td>NOMBRE</td><td>SALARIO</td></tr>";
          }
          //---------------------------------------------------------------------------
 
-         $stmt = $conn->prepare("SELECT sum(salario) as 'salario' FROM empleado,departamento,emple_depart WHERE departamento.cod_dpto=emple_depart.cod_dpto AND empleado.dni=emple_depart.dni AND nombre_dpto='$nombredepartamento';");
+         $stmt = $conn->prepare("SELECT sum(salario) FROM empleado,departamento,emple_depart WHERE departamento.cod_dpto=emple_depart.cod_dpto AND empleado.dni=emple_depart.dni AND nombre_dpto='$nombredepartamento' AND fecha_fin is null;");
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             foreach($stmt->fetchAll() as $row) {
-             echo "<tr><td>-SALARIO TOTAL-</td><td> ".$row["salario"]."</td></tr>";
+             echo "<tr><td>-SALARIO TOTAL-</td><td> ".$row["sum(salario)"]."</td></tr>";
 
             }
 
