@@ -63,23 +63,27 @@ try {
        $id_categoria=$row["id_categoria"];
      }
   //----------------------------------------------------
-  $stmt = $conn->prepare("SELECT nombre FROM producto");
+  $stmt = $conn->prepare("SELECT max(id_producto) as 'id_producto' FROM producto");
      $stmt->execute();
        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
-
        foreach($stmt->fetchAll() as $row) {
-          $cont++;
-           }
-//-------------
+         $cont=$row["id_producto"];
+         $quitar = explode("P", $cont);
+         if(count($quitar)>1){
+           $pos0=$quitar[1];
+         }else {
+           $pos0=$quitar[0];
+         }
 
-  $cod = str_pad($cont, 4, "0", STR_PAD_LEFT);
-    $id="P".$cod;
+         $contador=intval($pos0)+1;
+         $cod = str_pad($contador, 4, "0", STR_PAD_LEFT);
+         $id="P".$cod;
+       }
 
 //-----------------------------------------------------
     $stmt1 = $conn->prepare("INSERT INTO producto (id_producto,nombre,precio,id_categoria) VALUES ('$id','$producto','$precio','$id_categoria')");
     $stmt1->execute();
-
+    echo "Se ha añadido el producto ".$producto." a la categoria ".$categoria;
     // set the resulting array to associative
     $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
 

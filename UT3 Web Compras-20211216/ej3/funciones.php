@@ -33,20 +33,15 @@ return $conn;
 
 function altaalmacen($localidad,$conn){
   echo "</br>";
-  $cont=1;
 try {
 
-  $stmt = $conn->prepare("SELECT localidad FROM almacen");
+  $stmt = $conn->prepare("SELECT max(NUM_ALMACEN) as 'num' FROM almacen");
      $stmt->execute();
        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
-
        foreach($stmt->fetchAll() as $row) {
-          $cont++;
-           }
-//-------------
-
-  $cod = $cont*10;
+         $cont=$row["num"];
+}
+  $cod = $cont+10;
 
 //-----------------------------------------------------
     $stmt1 = $conn->prepare("INSERT INTO almacen (num_almacen,localidad) VALUES ('$cod','$localidad')");
@@ -54,6 +49,7 @@ try {
 
     // set the resulting array to associative
     $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
+    echo "Se ha añadido el almacen en ".$localidad;
 
  }
   catch(PDOException $e) {
