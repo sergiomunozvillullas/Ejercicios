@@ -33,6 +33,17 @@ function crearconexion($servername, $username, $password, $dbname){
   return $conn;
 }
 
+function validarnif($nif){
+  if (empty($nif)) {
+  }else{
+    $nifnumeros=substr($nif,0,8);
+    $nifletra=substr($nif,8,1);
+    // echo "$nifnumeros - $nifletra </br>";
+    if (is_numeric($nifnumeros) && ctype_alpha($nifletra)) {
+      return $nif;
+    }
+  }
+}
 
 function altacliente($nif,$nombre,$apellido,$cp,$direccion,$ciudad,$conn){
   echo "</br>";
@@ -47,10 +58,18 @@ function altacliente($nif,$nombre,$apellido,$cp,$direccion,$ciudad,$conn){
     echo "Se ha añadido el cliente: ".$nombre." ".$apellido."   (".$nif.")";
   }
   catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
-  }
 
+//echo "El código de excepción es: " . $e->getCode();
 
+    if ($e->getCode() == 23000) { //primary key duplicated
+          echo "Clave primaria duplicada, NIF";
+        }elseif ($e->getCode() == 22001) { //data too long
+          echo "NIF excede los parametros";
+        }else {
+            echo "Error: " . $e->getMessage();
+        }
+
+}
 }
 
 

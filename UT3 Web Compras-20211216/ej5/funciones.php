@@ -57,34 +57,41 @@ function mostrarprod($producto,$conn){
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     foreach($stmt->fetchAll() as $row) {
       $id_producto=$row["id_producto"];
-    }
+
 
     //-----------------------------------------------------
-    $stmt1 = $conn->prepare("SELECT cantidad FROM almacena WHERE id_producto='$id_producto'");
+    $stmt1 = $conn->prepare("SELECT cantidad,num_almacen FROM almacena WHERE id_producto='$id_producto'");
     $stmt1->execute();
 
     $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
 
     foreach($stmt1->fetchAll() as $row) {
       $cantidad=$row["cantidad"];
-    }
-    ?>
-    <!-- TABLA -->
-    <table border=1>
-      <tr>
-        <td> <?php echo "PRODUCTO" ?> </td>
-        <td> <?php echo "CANTIDAD" ?> </td>
-      </tr>
-      <tr>
-        <td> <?php echo $producto ?> </td>
-        <td> <?php echo $cantidad ?> </td>
-      </tr>
-    </table>
+      $almacen=$row["num_almacen"];
+
+      ?>
+      <!-- TABLA -->
+      <table border=1>
+        <tr>
+          <td> <?php echo "PRODUCTO" ?> </td>
+          <td> <?php echo "CANTIDAD" ?> </td>
+          <td> <?php echo "ALMACEN" ?> </td>
+        </tr>
+        <tr>
+          <td> <?php echo $producto ?> </td>
+          <td> <?php echo $cantidad ?> </td>
+          <td> <?php echo $almacen ?> </td>
+        </tr>
+      </table>
 
 
 
 
-    <?php
+      <?php
+
+  }
+  }
+
 
   }
   catch(PDOException $e) {

@@ -42,7 +42,7 @@ function mostraralmacen($almacen,$conn){
 
     foreach($stmt1->fetchAll() as $row) {
       $localidad=$row["localidad"];
-    }
+
 
     //-----------------------------------------------------
 
@@ -52,7 +52,7 @@ function mostraralmacen($almacen,$conn){
     foreach($stmt->fetchAll() as $row) {
     $id_prod=$row["id_producto"];
     $cantidad=$row["cantidad"];
-  }
+
 
   //-----------------------------------------------------
 
@@ -63,13 +63,8 @@ function mostraralmacen($almacen,$conn){
   $producto=$row["nombre"];
   $precio=$row["precio"];
   $id_cat=$row["id_categoria"];
-  }
 
 
-  }
-  catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
-  }
 
   ?>
   <!-- TABLA -->
@@ -98,6 +93,16 @@ function mostraralmacen($almacen,$conn){
 
 
   <?php
+}//foreach1
+}//foreach2
+}//foreach3
+
+  }
+  catch(PDOException $e) {
+    echo "Error: " . $e->getMessage();
+  }
+
+
 
 }
 

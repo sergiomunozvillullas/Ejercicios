@@ -48,7 +48,13 @@ $ciudad=$_POST['ciudad'];
 
 //FUNCIONES
 revisarparametros($nif,$nombre,$apellido,$cp,$direccion,$ciudad);
-altacliente($nif,$nombre,$apellido,$cp,$direccion,$ciudad,$conexion);
+$nifvalidado=validarnif($nif);
+if (empty($nifvalidado)) {
+  echo "<br> NIF incorrecto";
+}else {
+altacliente($nifvalidado,$nombre,$apellido,$cp,$direccion,$ciudad,$conexion);
+}
+
 
 //CERRAMOS CONEXION
 $conexion=null;

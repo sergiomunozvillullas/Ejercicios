@@ -32,13 +32,54 @@ function crearconexion($servername, $username, $password, $dbname){
   return $conn;
 }
 
+// function arrayid($conn){
+//   try {
+//     $arrayid=array();
+//     $stmt = $conn->prepare("SELECT almacena.id_producto,nombre,num_almacen FROM producto,almacena where almacena.id_producto=producto.id_producto");
+//     $stmt->execute();
+//
+//     // set the resulting array to associative
+//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+// 	 foreach($stmt->fetchAll() as $row) {
+//         array_push($arrayid,$row["id_producto"]);
+//      }
+// }
+// catch(PDOException $e) {
+//     echo "Error: " . $e->getMessage();
+// }
+// return $arrayid;
+// }
+
+
+
+// function arrayalmacen($conn){
+//   try {
+//     $arrayalmacen=array();
+//     $stmt = $conn->prepare("SELECT almacena.id_producto,nombre,num_almacen FROM producto,almacena where almacena.id_producto=producto.id_producto");
+//     $stmt->execute();
+//
+//     // set the resulting array to associative
+//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+// 	 foreach($stmt->fetchAll() as $row) {
+//         array_push($arrayalmacen,$row["num_almacen"]);
+//      }
+// }
+// catch(PDOException $e) {
+//     echo "Error: " . $e->getMessage();
+// }
+// return $arrayalmacen;
+// }
+
 
 function compra($nif,$producto,$cantidad,$conn){
   echo "</br>";
+  $idalm= explode("/",$producto);
+  $producto=$idalm[0];
+  $almacen=$idalm[1];
+
   $fecha=date('Y-m-d');
   try {
-
-    $stmt1 = $conn->prepare("SELECT cantidad FROM almacena WHERE id_producto='$producto'");
+    $stmt1 = $conn->prepare("SELECT cantidad FROM almacena WHERE id_producto='$producto' and num_almacen='$almacen'");
     $stmt1->execute();
     $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -48,20 +89,29 @@ function compra($nif,$producto,$cantidad,$conn){
       //--------------------------------------------
       if ($cantidad<$cantidadprod) {
         $cantidadtotal=$cantidadprod-$cantidad;
-        $stmt = $conn->prepare("UPDATE almacena SET cantidad='$cantidadtotal' WHERE id_producto='$producto'");
+        $stmt = $conn->prepare("UPDATE almacena SET cantidad='$cantidadtotal' WHERE id_producto='$producto' and num_almacen='$almacen'");
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
         //--------------------------------------------
 
-        $stmt3 = $conn->prepare("SELECT nif FROM compra WHERE nif='$nif'");
+        $stmt3 = $conn->prepare("SELECT nif,id_producto,fecha_compra FROM compra WHERE nif='$nif'");
         $stmt3->execute();
         $result3 = $stmt3->setFetchMode(PDO::FETCH_ASSOC);
 
         foreach($stmt3->fetchAll() as $row) {
           $nifusado=$row["nif"];
-        }
-        echo "$nifusado";
+            $id=$row["id_producto"];
+            $fech=$row["fecha_compra"];
+}//foreach
+        //--------------------------------------------
+        $stmt4 = $conn->prepare("SELECT fecha_compra FROM compra WHERE nif='$nif' AND id_producto='$producto'");
+        $stmt4->execute();
+        $result4 = $stmt4->setFetchMode(PDO::FETCH_ASSOC);
+
+        foreach($stmt4->fetchAll() as $row) {
+            $fech=$row["fecha_compra"];
+}//foreach
         //--------------------------------------------
         if (empty($nifusado)) {
 
@@ -71,27 +121,46 @@ function compra($nif,$producto,$cantidad,$conn){
 
           // set the resulting array to associative
           $result2 = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
-          echo "El cliente con nif ".$nif." ha comprado ".$cantidad." productos con el id ".$producto;
+          echo "El cliente con nif ".$nif." ha comprado ".$cantidad." productos con el id ".$producto."<br>";
           //--------------------------------------------
 
+
         }else {
+          if (empty($id)) {
+            $stmt5 = $conn->prepare("INSERT INTO compra (nif,id_producto,fecha_compra,unidades) VALUES ('$nif','$producto','$fecha','$cantidad')");
+            $stmt5->execute();
 
-          $stmt = $conn->prepare("UPDATE compra SET unidades=unidades+'$cantidad' WHERE nif='$nif'");
-          $stmt->execute();
-          $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-          echo "El cliente con nif ".$nif." ha comprado ".$cantidad." productos con el id ".$producto;
+            // set the resulting array to associative
+            $result5 = $stmt5->setFetchMode(PDO::FETCH_ASSOC);
+            echo "El cliente con nif ".$nif." ha comprado ".$cantidad." productos con el id ".$producto."<br>";
+          }
+          if ($fech!=$fecha) {
+            $stmt7 = $conn->prepare("INSERT INTO compra (nif,id_producto,fecha_compra,unidades) VALUES ('$nif','$producto','$fecha','$cantidad')");
+            $stmt7->execute();
+
+            // set the resulting array to associative
+            $result7 = $stmt7->setFetchMode(PDO::FETCH_ASSOC);
+            echo "El cliente con nif ".$nif." ha comprado ".$cantidad." productos con el id ".$producto."<br>";
+          }else {
+
+
+          $stmt6 = $conn->prepare("UPDATE compra SET unidades=unidades+'$cantidad' WHERE nif='$nif' and id_producto='$producto'");
+          $stmt6->execute();
+          $result6 = $stmt6->setFetchMode(PDO::FETCH_ASSOC);
+          echo "El cliente con nif ".$nif." ha comprado ".$cantidad." productos con el id ".$producto."<br>";
         }
+      }
 
 
 
-
+echo $fech;
       }else {
         echo "NO se pudo hacer la compra <br>";
         echo "La cantidad maxima a comprar de este producto es ".$cantidadprod;
       }
 
     }//foreach cantidad
-  }
+  }//try
   catch(PDOException $e) {
     echo "Error: " . $e->getMessage();
   }

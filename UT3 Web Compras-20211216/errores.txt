@@ -1,1 +1,2 @@
-compra suma camisetas y el mismo id y nifusado si es la primera vez//consult alamacen, todos productos//consulta stock añdir numero almacen
+
+ej7 compras

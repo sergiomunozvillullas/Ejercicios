@@ -41,13 +41,13 @@
 
         //CREAMOS EL DESPLEGABLE
         //SELECT
-        $stmt = $conexion->prepare("SELECT id_producto,nombre FROM producto");
+        $stmt = $conexion->prepare("SELECT almacena.id_producto,nombre,num_almacen FROM producto,almacena where almacena.id_producto=producto.id_producto");
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         foreach($stmt->fetchAll() as $row) {
           //OPTIONS
           ?>
-          <option value="<?php echo $row['id_producto']; ?>"> <?php echo $row['nombre']; ?> </option>';
+          <option value="<?php echo $row['id_producto']."/".$row['num_almacen']; ?>"> <?php echo $row['nombre']."- ALMACEN ".$row['num_almacen']; ?> </option>';
 
           <?php
         }
