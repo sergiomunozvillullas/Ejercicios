@@ -56,11 +56,13 @@ if (isset($_POST['enviar'])) {
 
   //AÑADIMOS PARAMETROS
     $nif=$_POST['nif'];
-
+    $desde=$_POST['desde'];
+    $hasta=$_POST['hasta'];
+echo "$desde";
 
   //FUNCIONES
-  revisarparametros($nifnif);
-  mostraralmacen($nif,$conexion);
+  revisarparametros($nif,$desde,$hasta);
+  mostrarcompras($nif,$desde,$hasta,$conexion);
 
   //CERRAMOS CONEXION
   $conexion=null;

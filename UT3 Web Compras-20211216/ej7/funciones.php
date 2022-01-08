@@ -8,11 +8,11 @@ function test_input($data) {
   return $data;
 }
 
-function revisarparametros($almacen){
+function revisarparametros($nif,$desde,$hasta){
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $almacen = test_input($_POST["almacen"]);
-
+  $nif = test_input($_POST["nif"]);
+    $desde = test_input($_POST["desde"]);
+  $hasta = test_input($_POST["hasta"]);
   }
 }
 
@@ -31,73 +31,63 @@ function crearconexion($servername, $username, $password, $dbname){
 }
 
 
-function mostraralmacen($almacen,$conn){
+function mostrarcompras($nif,$desde,$hasta,$conn){
   echo "</br>";
   try {
+$cont=0;
+        $stmt = $conn->prepare("SELECT id_producto FROM compra WHERE nif='$nif' AND fecha_compra BETWEEN '$desde' AND '$hasta' ");
+        $stmt->execute();
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        foreach($stmt->fetchAll() as $row) {
+        $id=$row["id_producto"];
+$cont++;
 
-    $stmt1 = $conn->prepare("SELECT localidad FROM almacen WHERE num_almacen='$almacen'");
+      //-----------------------------------------------------
+
+    $stmt1 = $conn->prepare("SELECT id_producto,nombre,precio FROM producto WHERE id_producto='$id'");
     $stmt1->execute();
 
     $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
 
     foreach($stmt1->fetchAll() as $row) {
-      $localidad=$row["localidad"];
+      $idprod=$row["id_producto"];
+      $nombreprod=$row["nombre"];
+      $precioprod=$row["precio"];
     }
 
+    ?>
+    <!-- TABLA -->
+    <table border=1>
+      <tr>
+        <td> <?php echo "NIF" ?> </td>
+        <td> <?php echo "ID_PRODUCTO" ?> </td>
+        <td> <?php echo "PRODUCTO" ?> </td>
+        <td> <?php echo "PRECIO" ?> </td>
+        <td> <?php echo "SUMA COMPRA TOTAL" ?> </td>
+      </tr>
+      <tr>
+        <td> <?php echo $nif ?> </td>
+        <td> <?php echo $idprod ?> </td>
+        <td> <?php echo $nombreprod ?> </td>
+        <td> <?php echo $precioprod ?> </td>
+        <td> <?php echo $cont ?> </td>
+      </tr>
+    </table>
+
+
+
+
+    <?php
+
+}
     //-----------------------------------------------------
-
-    $stmt = $conn->prepare("SELECT id_producto,cantidad FROM almacena WHERE num_almacen='$almacen'");
-    $stmt->execute();
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    foreach($stmt->fetchAll() as $row) {
-    $id_prod=$row["id_producto"];
-    $cantidad=$row["cantidad"];
-  }
-
-  //-----------------------------------------------------
-
-  $stmt2 = $conn->prepare("SELECT nombre,precio,id_categoria FROM producto WHERE id_producto='$id_prod'");
-  $stmt2->execute();
-  $result2 = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
-  foreach($stmt2->fetchAll() as $row) {
-  $producto=$row["nombre"];
-  $precio=$row["precio"];
-  $id_cat=$row["id_categoria"];
-  }
-
 
   }
   catch(PDOException $e) {
     echo "Error: " . $e->getMessage();
   }
 
-  ?>
-  <!-- TABLA -->
-  <table border=1>
-    <tr>
-      <td> <?php echo "NUM_ALMACEN" ?> </td>
-      <td> <?php echo "LOCALIDAD" ?> </td>
-      <td> <?php echo "ID_PRODUCTO" ?> </td>
-      <td> <?php echo "PRODUCTO" ?> </td>
-      <td> <?php echo "PRECIO" ?> </td>
-      <td> <?php echo "ID_CATEGORIA" ?> </td>
-      <td> <?php echo "CANTIDAD" ?> </td>
-    </tr>
-    <tr>
-      <td> <?php echo $almacen ?> </td>
-      <td> <?php echo $localidad ?> </td>
-      <td> <?php echo $id_prod ?> </td>
-      <td> <?php echo $producto ?> </td>
-      <td> <?php echo $precio ?> </td>
-      <td> <?php echo $id_cat ?> </td>
-      <td> <?php echo $cantidad ?> </td>
-    </tr>
-  </table>
 
-
-
-
-  <?php
 
 }
 
