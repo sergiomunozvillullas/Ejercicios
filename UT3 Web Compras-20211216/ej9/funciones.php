@@ -32,43 +32,6 @@ function crearconexion($servername, $username, $password, $dbname){
   return $conn;
 }
 
-// function arrayid($conn){
-//   try {
-//     $arrayid=array();
-//     $stmt = $conn->prepare("SELECT almacena.id_producto,nombre,num_almacen FROM producto,almacena where almacena.id_producto=producto.id_producto");
-//     $stmt->execute();
-//
-//     // set the resulting array to associative
-//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-// 	 foreach($stmt->fetchAll() as $row) {
-//         array_push($arrayid,$row["id_producto"]);
-//      }
-// }
-// catch(PDOException $e) {
-//     echo "Error: " . $e->getMessage();
-// }
-// return $arrayid;
-// }
-
-
-
-// function arrayalmacen($conn){
-//   try {
-//     $arrayalmacen=array();
-//     $stmt = $conn->prepare("SELECT almacena.id_producto,nombre,num_almacen FROM producto,almacena where almacena.id_producto=producto.id_producto");
-//     $stmt->execute();
-//
-//     // set the resulting array to associative
-//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-// 	 foreach($stmt->fetchAll() as $row) {
-//         array_push($arrayalmacen,$row["num_almacen"]);
-//      }
-// }
-// catch(PDOException $e) {
-//     echo "Error: " . $e->getMessage();
-// }
-// return $arrayalmacen;
-// }
 
 
 function compra($nif,$producto,$cantidad,$conn){
@@ -152,8 +115,6 @@ function compra($nif,$producto,$cantidad,$conn){
       }
 
 
-
-echo $fech;
       }else {
         echo "NO se pudo hacer la compra <br>";
         echo "La cantidad maxima a comprar de este producto es ".$cantidadprod;
