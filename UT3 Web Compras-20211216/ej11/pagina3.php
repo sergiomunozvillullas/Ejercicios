@@ -5,11 +5,11 @@ session_destroy();
 ?>
 <html>
 <head>
-<meta charset="UTF-8"/>
-<title>Pagina 3</title>
+  <meta charset="UTF-8"/>
+  <title>Pagina 3</title>
 </head>
 <body>
-<p>Has Cerrado Sesion</p>
-<br /><a href="comlogincli.php">Volver a Login</a>
+  <p>Has Cerrado Sesion</p>
+  <br /><a href="comlogincli.php">Volver a Login</a>
 </body>
 </html>

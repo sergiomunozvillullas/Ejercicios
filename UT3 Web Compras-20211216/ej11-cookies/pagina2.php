@@ -1,5 +1,7 @@
 <?php
-session_start();
+$cookie_name = "usuario";
+$cookie_value = "";
+setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 segundos = 1 día
 //FUNCIONES
 require "funciones.php";
 
@@ -29,37 +31,21 @@ $conexion=crearconexion($servername, $username, $password, $dbname);
     $nif=contra($nombre,$contra,$conexion);
 
     if ($nif!="" ) {
-      $_SESSION['nombre'] = $_POST['nombre'];
-      $_SESSION['contra'] = $_POST['contra'];
       echo "Has iniciado sesion: " . $_POST['nombre'] . "<br>";
       echo "Contraseña: " . $_POST['contra'] . "<br>";
       echo "Tu NIF es: ".$nif. "<br>";
       echo "<p><a href='../indice.html'>Portal de compras</a></p>";
       echo "<p><a href='pagina3.php'>Cerrar Sesion</a></p>";
-
+      $cookie_value = "$nombre";
+      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 segundos = 1 día
     }
 
 
-  }else{
-    if(isset($_SESSION['nombre']) && isset($_SESSION['contra'])){
-      //AÑADIMOS PARAMETROS
-
-      $nombre = $_SESSION['nombre'];
-      $contra = $_SESSION['contra'];
-
-      echo "<br> Has iniciado sesion con: " . $_SESSION['nombre'] . "<br>";
-      echo "Contraseña: " . $_SESSION['contra'] . "<br>";
-
-      $nif=contra($nombre,$contra,$conexion);
-      echo "Tu NIF es: ".$nif. "<br>";
-      echo "<p><a href='../indice.html'>Portal de compras</a></p>";
-      echo "<p><a href='pagina3.php'>Cerrar Sesion</a></p>";
-
-    }else{
+    else{
       echo "Acceso Restringido debes hacer Login con tu usuario";
     }
-  }
 
+  }
 
 
   ?>
