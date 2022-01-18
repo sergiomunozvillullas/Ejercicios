@@ -7,62 +7,56 @@ require "funciones.php";
 echo "Creamos la conexion: ";
 $servername="localhost"; $username="root"; $password="rootroot"; $dbname="comprasweb";
 $conexion=crearconexion($servername, $username, $password, $dbname);
-?>
-<html>
-<head>
-  <title>Pagina 2</title>
-</head>
-<body>
-  <?php
-  if(isset($_POST['nombre']) && isset($_POST['contra'])){
+if(isset($_POST['nombre']) && isset($_POST['contra'])){
 
 
-    //AÑADIMOS PARAMETROS
-    $nombre=$_POST['nombre'];
-    $contra=$_POST['contra'];
+  //AÑADIMOS PARAMETROS
+  $nombre=$_POST['nombre'];
+  $contra=$_POST['contra'];
 
 
-    //FUNCIONES
-    revisarparametros($nombre,$contra);
+  //FUNCIONES
+  revisarparametros($nombre,$contra);
 
-    //COMPROBAMOS LA CONEXION
-    $nif=contra($nombre,$contra,$conexion);
+  //COMPROBAMOS LA CONEXION
+  $nif=contra($nombre,$contra,$conexion);
 
-    if ($nif!="" ) {
-      $_SESSION['nombre'] = $_POST['nombre'];
-      $_SESSION['contra'] = $_POST['contra'];
-      echo "Has iniciado sesion: " . $_POST['nombre'] . "<br>";
-      echo "Contraseña: " . $_POST['contra'] . "<br>";
-      echo "Tu NIF es: ".$nif. "<br>";
-      echo "<p><a href='../indice.html'>Portal de compras</a></p>";
-      echo "<p><a href='pagina3.php'>Cerrar Sesion</a></p>";
-
-    }
-
+  if ($nif!="00000000X" ) {
+    $_SESSION['nombre'] = $_POST['nombre'];
+    $_SESSION['contra'] = $_POST['contra'];
+    echo "Has iniciado sesion: " . $_POST['nombre'] . "<br>";
+    echo "Contraseña: " . $_POST['contra'] . "<br>";
+    echo "Tu NIF es: ".$nif. "<br>";
+    echo "<p><a href='../indice.html'>Portal de compras</a></p>";
+    echo "<p><a href='comlogincli.php'>Cerrar Sesion</a></p>";
 
   }else{
-    if(isset($_SESSION['nombre']) && isset($_SESSION['contra'])){
-      //AÑADIMOS PARAMETROS
+    echo "<br>Acceso Restringido debes hacer Login con tu usuario";
+    echo "<p><a href='comlogincli.php'>Iniciar Sesion</a></p>";
 
-      $nombre = $_SESSION['nombre'];
-      $contra = $_SESSION['contra'];
-
-      echo "<br> Has iniciado sesion con: " . $_SESSION['nombre'] . "<br>";
-      echo "Contraseña: " . $_SESSION['contra'] . "<br>";
-
-      $nif=contra($nombre,$contra,$conexion);
-      echo "Tu NIF es: ".$nif. "<br>";
-      echo "<p><a href='../indice.html'>Portal de compras</a></p>";
-      echo "<p><a href='pagina3.php'>Cerrar Sesion</a></p>";
-
-    }else{
-      echo "Acceso Restringido debes hacer Login con tu usuario";
-    }
   }
 
 
+}else{
+  if(isset($_SESSION['nombre']) && isset($_SESSION['contra'])){
+    //AÑADIMOS PARAMETROS
 
-  ?>
-  <br /><br /><a href="comlogincli.php">Volver a pagina Login</a>
-</body>
-</html>
+    $nombre = $_SESSION['nombre'];
+    $contra = $_SESSION['contra'];
+
+    echo "<br> Has iniciado sesion con: " . $_SESSION['nombre'] . "<br>";
+    echo "Contraseña: " . $_SESSION['contra'] . "<br>";
+
+    $nif=contra($nombre,$contra,$conexion);
+    echo "Tu NIF es: ".$nif. "<br>";
+    echo "<p><a href='../indice.html'>Portal de compras</a></p>";
+    echo "<p><a href='comlogincli.php'>Cerrar Sesion</a></p>";
+
+  }else{
+    echo "<br>Acceso Restringido debes hacer Login con tu usuario";
+    echo "<p><a href='comlogincli.php'>Iniciar Sesion</a></p>";
+
+  }
+}
+
+?>

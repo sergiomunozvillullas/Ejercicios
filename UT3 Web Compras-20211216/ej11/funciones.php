@@ -35,7 +35,7 @@ function crearconexion($servername, $username, $password, $dbname){
 
 function contra($nombre,$contra,$conn){
   echo "</br>";
-  $nif="";
+  $nif="00000000X";
   try {
     $stmt1 = $conn->prepare("SELECT nif FROM cliente WHERE nombre='$nombre' and clave='$contra'");
     $stmt1->execute();
