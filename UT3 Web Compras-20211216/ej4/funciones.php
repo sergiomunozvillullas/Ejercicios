@@ -61,14 +61,37 @@ try {
 }
 
 //-----------------------------------------------------
+$stmt7 = $conn->prepare("SELECT id_producto,cantidad FROM almacena WHERE id_producto='$id_producto' AND num_almacen='$almacen'");
+$stmt7->execute();
+
+// set the resulting array to associative
+$result7 = $stmt7->setFetchMode(PDO::FETCH_ASSOC);
+foreach($stmt7->fetchAll() as $row) {
+  $idvalido=$row["id_producto"];
+  $cant=$row["cantidad"];
+
+}
+//----------------------------------------------------
+if(empty($idvalido)){
     $stmt1 = $conn->prepare("INSERT INTO almacena (num_almacen,id_producto,cantidad) VALUES ('$almacen','$id_producto','$cantidad')");
     $stmt1->execute();
 
     // set the resulting array to associative
     $result1 = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
     echo "Se han añadido ".$cantidad." de ".$producto." en el almacen número ".$almacen;
+  }else {
+    $cantidadtotal=$cantidad+$cant;
+    $stmt8 = $conn->prepare("UPDATE almacena SET cantidad='$cantidadtotal' WHERE id_producto='$idvalido' AND num_almacen='$almacen'");
+    $stmt8->execute();
 
- }
+    // set the resulting array to associative
+    $result8 = $stmt8->setFetchMode(PDO::FETCH_ASSOC);
+    echo "Se han añadido ".$cantidad." de ".$producto." en el almacen número ".$almacen;
+  }
+//--------------------------------------------
+
+}
+
   catch(PDOException $e) {
       echo "Error: " . $e->getMessage();
   }

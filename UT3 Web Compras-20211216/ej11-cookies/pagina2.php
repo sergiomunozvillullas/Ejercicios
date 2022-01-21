@@ -28,9 +28,9 @@ $conexion=crearconexion($servername, $username, $password, $dbname);
       echo "Has iniciado sesion: " . $_POST['nombre'] . "<br>";
       echo "Contraseña: " . $_POST['contra'] . "<br>";
       echo "Tu NIF es: ".$nif. "<br>";
-      echo "<p><a href='../indice.html'>Portal de compras</a></p>";
+      echo "<p><a href='../ej12/comprocli.php'>Portal de compras</a></p>";
       echo "<p><a href='comlogincli.php'>Cerrar Sesion</a></p>";
-      $cookie_value = "$nombre";
+      $cookie_value = "$nombre "."$contra";
       setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 segundos = 1 día
     }else {
       echo "<br />Acceso Restringido debes hacer Login con tu usuario.";

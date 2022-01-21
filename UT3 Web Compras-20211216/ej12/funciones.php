@@ -31,20 +31,6 @@ function crearconexion($servername, $username, $password, $dbname){
   return $conn;
 }
 
-// function arraycompra($arraycompra,$nif,$producto,$cantidad,$conn){
-//   $idalm= explode("/",$producto);
-//   $producto=$idalm[0];
-//   $almacen=$idalm[1];
-//   $arraycompra = [
-//       "nif" => 14,
-//       "Peter" => 4,
-//       "Monnie" => 7,
-//       "Banh" => 10
-//   ];
-//
-// return $arraycompra;
-//
-// }
 
 
 function compra($nif,$producto,$cantidad,$conn){
