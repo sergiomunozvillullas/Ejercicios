@@ -11,6 +11,9 @@ $conexion=crearconexion($servername, $username, $password, $dbname);
 
 //AÑADIMOS PARAMETROS
 $producto=$_POST['producto'];
+$prodalmacen= explode("/",$producto);
+$prod=$prodalmacen[0];
+$alma=$prodalmacen[1];
 $cantidad=$_POST['cantidad'];
 
 //COOKIE Y PARAMETROS COOKIE
@@ -25,22 +28,41 @@ $nif=contra($nombre,$contra,$conexion);
 compra($nif,$producto,$cantidad,$conexion);
 
 //EJECUCIÓN
-$cesta="cesta";
-$carrito=array();
+$arraycesta = ["$prod" => $cantidad];
+//creamos la setcookie
+$nombrecookie="cesta";
+//escribimos la cookie con el array codificado
+$contenido=json_encode($arraycesta);
+setcookie($nombrecookie,$contenido, time() + (86400 * 30), "/");
+//mostramos el valor de la cookie descodificando
+$datos=json_decode($_COOKIE[$nombrecookie], true);
+var_dump($datos);
+print_r($_COOKIE);
+//array asociativo
+foreach ($datos as $key => $value) {
+  if ($key==$prod) {
+    $total=$value+$cantidad;
+    $arraycesta[$key]=($total);
 
-setcookie($cesta, json_encode($carrito), time()+3600);
-$data = json_decode($_COOKIE[$cesta], true);
-array_push($carrito,$data);
-array_push($carrito,$cantidad);
-setcookie($cesta, json_encode($carrito), time()+3600);
-$data = json_decode($_COOKIE[$cesta], true);
-for ($i=0; $i <sizeof($data) ; $i++) {
-echo "$data[$i]";
+  }else {
+
+$arraycesta[$key]=($value);
 }
+}
+  $contenido=json_encode($arraycesta);
+setcookie($nombrecookie,$contenido, time() + (86400 * 30), "/");
 
 
 echo "<br /><a href='comprocli.php'>Volver a comprar</a>";
+echo "<br /><a href='fin.php'>Comprobar pedido y aceptar</a>";
+
 //CERRAMOS CONEXION
 $conexion=null;
+}else {
+  echo "<br />Acceso Restringido debes hacer Login con tu usuario.";
+
+echo "<br /><br /><a href='../ej11-cookies/comlogincli.php'>Volver a pagina Login</a>";
+
+  $arraycesta = array();
 }
  ?>
