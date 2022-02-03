@@ -1,7 +1,5 @@
 <?php
-$cookie_name = "usuario";
-$cookie_value = "";
-setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 segundos = 1 día
+
 //FUNCIONES
 require "funciones.php";
 
@@ -30,20 +28,47 @@ $conexion=crearconexion($servername, $username, $password, $dbname);
       echo "Tu NIF es: ".$nif. "<br>";
       echo "<p><a href='../ej12/comprocli.php'>Portal de compras</a></p>";
       echo "<p><a href='comlogincli.php'>Cerrar Sesion</a></p>";
+      $cookie_name = "usuario";
       $cookie_value = "$nombre "."$contra";
       setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 segundos = 1 día
     }else {
+      ?>
+      <html>
+      <head>
+      	<title>Pagina Login Cookie</title>
+      </head>
+      <body>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+      			<h1> Login </h1>
+      			<p>Usuario:<input type="text" placeholder="Introduce usuario" name="nombre" required/></p>
+      			<p>Contraseña:<input type="text" placeholder="Introduce la contraseña" name="contra" required/></p><br />
+      			<input type="submit" value="Login" />
+      		</form>
+      </body>
+      </html>
+
+      <?php
       echo "<br />Acceso Restringido debes hacer Login con tu usuario.";
-  echo "<br /><br /><a href='comlogincli.php'>Volver a pagina Login</a>";
 
 }
 }else {
+  ?>
+  <html>
+  <head>
+    <title>Pagina Login Cookie</title>
+  </head>
+  <body>
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        <h1> Login </h1>
+        <p>Usuario:<input type="text" placeholder="Introduce usuario" name="nombre" required/></p>
+        <p>Contraseña:<input type="text" placeholder="Introduce la contraseña" name="contra" required/></p><br />
+        <input type="submit" value="Login" />
+      </form>
+  </body>
+  </html>
 
+  <?php
       echo "<br />Acceso Restringido debes hacer Login con tu usuario";
-  echo "<br /><br /><a href='comlogincli.php'>Volver a pagina Login</a>";
     }
-
-
-
 
   ?>

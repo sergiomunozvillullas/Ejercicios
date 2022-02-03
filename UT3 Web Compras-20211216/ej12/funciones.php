@@ -50,7 +50,7 @@ function compra($nif,$producto,$cantidad,$conn){
 
       //--------------------------------------------
       if ($cantidad<$cantidadprod) {
-        $cantidadtotal=$cantidadprod-$cantidad;
+        $cantidadtotal=intval($cantidadprod)-intval($cantidad);
         $stmt = $conn->prepare("UPDATE almacena SET cantidad='$cantidadtotal' WHERE id_producto='$producto' and num_almacen='$almacen'");
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
